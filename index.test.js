@@ -65,30 +65,88 @@ describe('[Exercise 4] Counter', () => {
 })
 
 describe('[Exercise 5] Seasons', () => {
-  // let seasons
-  // beforeEach(() => {
-  //   seasons = new utils.Seasons() // each t must start with fresh seasons
-  // })
-  // test('[9] the FIRST call of seasons.next returns "summer"', () => {})
-  // test('[10] the SECOND call of seasons.next returns "fall"', () => {})
-  // test('[11] the THIRD call of seasons.next returns "winter"', () => {})
-  // test('[12] the FOURTH call of seasons.next returns "spring"', () => {})
-  // test('[13] the FIFTH call of seasons.next returns again "summer"', () => {})
-  // test('[14] the 40th call of seasons.next returns "spring"', () => {})
+  let seasons
+  beforeEach(() => {
+    seasons = new utils.Seasons() // each t must start with fresh seasons
+  })
+  test('[9] the FIRST call of seasons.next returns "summer"', () => {
+    expect(seasons.next()).toBe('summer')
+  })
+  test('[10] the SECOND call of seasons.next returns "fall"', () => {
+    seasons.next()
+    expect(seasons.next()).toBe('fall')
+  })
+  test('[11] the THIRD call of seasons.next returns "winter"', () => {
+    seasons.next()
+    seasons.next()
+    expect(seasons.next()).toBe('winter')
+  })
+  test('[12] the FOURTH call of seasons.next returns "spring"', () => {
+    seasons.next()
+    seasons.next()
+    seasons.next()
+    expect(seasons.next()).toBe('spring')
+  })
+  test('[13] the FIFTH call of seasons.next returns again "summer"', () => {
+    seasons.next()
+    seasons.next()
+    seasons.next()
+    seasons.next()
+    expect(seasons.next()).toBe('summer')
+  })
+  test('[14] the 40th call of seasons.next returns "spring"', () => {
+    for(let i = 0; i < 40; i++ ){
+      seasons.next()
+    }
+    expect(seasons.next()).toBe('summer')
+  })
 })
 
 describe('[Exercise 6] Car', () => {
-  // let focus
-  // beforeEach(() => {
-  //   focus = new utils.Car('focus', 20, 30) // each t must start with a fresh car
-  // })
-  // test('[15] driving the car returns the updated odometer', () => {})
-  // test('[16] driving the car uses gas', () => {})
-  // test('[17] refueling allows to keep driving', () => {})
-  // test('[18] adding fuel to a full tank has no effect', () => {})
+  let focus
+  beforeEach(() => {
+    focus = new utils.Car('focus', 20, 30) // each t must start with a fresh car
+  })
+  test('[15] driving the car returns the updated odometer', () => {
+    expect(focus.drive(100)).toBe(100)
+    expect(focus.drive(100)).toBe(200)
+    expect(focus.drive(100)).toBe(300)
+    expect(focus.drive(200)).toBe(500)
+  })
+  test('[16] driving the car uses gas', () => {
+    focus.drive(600)
+    expect(focus.drive(600)).toBe(600)
+    expect(focus.drive(100)).toBe(600)
+    expect(focus.drive(300)).toBe(600)
+    expect(focus.tank).toBe(0)
+  })
+  test('[17] refueling allows to keep driving', () => {
+    focus.drive(600)
+    focus.refuel(10)
+    expect(focus.drive(600)).toBe(900)
+    focus.refuel(20)
+    expect(focus.drive(600)).toBe(1500)
+    expect(focus.drive(200)).toBe(1500) //there is not gas so you dont move
+  })
+  test('[18] adding fuel to a full tank has no effect', () => {
+    focus.refuel(20000000)
+    expect(focus.drive(700)).toBe(600)
+    focus.refuel(4000)
+    expect(focus.drive(1000)).toBe(1200)
+  })
 })
 
 describe('[Exercise 7] isEvenNumberAsync', () => {
-  // test('[19] resolves true if passed an even number', () => {})
-  // test('[20] resolves false if passed an odd number', () => {})
+  test('[19] resolves true if passed an even number', async () => {
+    const result = await utils.isEvenNumberAsync(4)
+    expect(result).toBe(true)
+  })
+  test('[20] resolves false if passed an odd number', async () => {
+    const result = await utils.isEvenNumberAsync(5)
+    expect(result).toBe(false)
+  })
+  test('[21] rejects NaN with an error message "number must be a number"', async () => {
+    const result = await utils.isEvenNumberAsync('branden')
+    expect(result).toBe("number must be a number")
+  })
 })
